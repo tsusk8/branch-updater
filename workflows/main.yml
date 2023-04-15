@@ -1,0 +1,23 @@
+name: Update target branch with changes from source branch
+
+on:
+  push:
+    branches:
+      - a
+      - b
+
+jobs:
+  update_c:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: c
+      - name: Merge changes from source branch into c
+        run: |
+          git remote add upstream https://github.com/tsusk8/auto_pull.git
+          git fetch upstream
+          git merge --no-commit --no-ff ${{ github.ref }}
+          git commit -m "Merge changes from source branch into c"
+          git push upstream c
